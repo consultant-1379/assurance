@@ -1,0 +1,20 @@
+image:
+  repository: armdocker.epk.ericsson.se/proj-sd-assurance-service-helm
+  tag: 1.0.0
+
+postgresql:
+  driverClass: org.postgresql.Driver
+  datasourceUrl: jdbc:postgresql://eric-data-document-database-pg:5432/policy_db
+  datasourceUsername: policynbi
+  datasourcePassword: Edb_policy
+  
+apexServer:
+  url: dopolicy
+  port: 12346
+  path: /apex/FirstConsumer/EventIn
+  transactionTimeout: 120
+  
+jvm:
+  heap:
+    min: "300m"
+    max: "2000m"

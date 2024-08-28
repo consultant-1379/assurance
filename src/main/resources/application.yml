@@ -1,0 +1,11 @@
+postgresql:
+  driverClass: "${POSTGRESQL_DRIVER_CLASS:org.postgresql.Driver}"
+  datasourceUrl: "${POSTGRESQL_DATASOURCE_URL:jdbc:postgresql://10.45.193.46:5432/policy_db}"
+  datasourceUsername: "${POSTGRESQL_DATASOURCE_USERNAME:policynbi}"
+  datasourcePassword: "${POSTGRESQL_DATASOURCE_PASSWORD:Edb_policy}"
+ 
+apexServer:
+  url: "${APEX_URL:dopolicy}"
+  port: "${APEX_PORT:12346}"
+  path: "${APEX_PATH:/apex/FirstConsumer/EventIn}"
+  transactionTimeout: "${TRANSACTION_TIMEOUT:120}"

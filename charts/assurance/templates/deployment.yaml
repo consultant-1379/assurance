@@ -1,0 +1,45 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Chart.Name }}
+  labels:
+    app: {{ .Chart.Name }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Chart.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Chart.Name }}
+    spec:
+      initContainers:
+      - name: init-waitfordb
+        image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+        command: ["sh", "-c", "for i in $(seq 1 300); do nc eric-data-document-database-pg 5432 && exit 0 || sleep 3; done; exit 1"]
+      containers:
+      - image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+        name: {{ .Chart.Name }}
+        ports:
+        - containerPort: 8080
+        env:
+        - name: POSTGRESQL_DRIVER_CLASS
+          value: {{ .Values.postgresql.driverClass }}
+        - name: POSTGRESQL_DATASOURCE_URL
+          value: {{ .Values.postgresql.datasourceUrl }}
+        - name: POSTGRESQL_DATASOURCE_USERNAME
+          value: {{ .Values.postgresql.datasourceUsername }}
+        - name: POSTGRESQL_DATASOURCE_PASSWORD
+          value: {{ .Values.postgresql.datasourcePassword }}
+        - name: APEX_URL
+          value: {{ .Values.apexServer.url }}
+        - name: APEX_PORT
+          value: "{{ .Values.apexServer.port }}"
+        - name: APEX_PATH
+          value: {{ .Values.apexServer.path }}
+        - name: TRANSACTION_TIMEOUT
+          value: "{{ .Values.apexServer.transactionTimeout }}"
+        - name: JAVA_OPTS
+          value: "-Xms{{ .Values.jvm.heap.min }} -Xmx{{ .Values.jvm.heap.max }}"
